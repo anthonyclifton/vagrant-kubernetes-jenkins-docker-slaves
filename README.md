@@ -4,3 +4,6 @@
 
 # How?
 
+https://thenewstack.io/how-to-deploy-a-kubernetes-cluster-with-ubuntu-server-18-04/
+
+
