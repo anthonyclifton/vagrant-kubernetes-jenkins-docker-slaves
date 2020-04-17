@@ -5,6 +5,11 @@ Vagrant.configure("2") do |config|
 
     config.vm.provision "shell", inline: <<-SHELL
         sudo apt-get update
+#         sudo apt-get upgrade -y
+        sudo apt -y install docker.io
+        sudo usermod -aG docker $USER
+        sudo systemctl start docker
+        sudo systemctl enable docker
     SHELL
 
     config.vm.define "kub1" do |kub1|
