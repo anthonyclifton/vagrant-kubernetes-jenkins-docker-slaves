@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
       v.memory = 1024
       v.cpus = 2
     end
-    
+
     config.vm.provision "shell", inline: <<-SHELL
         sudo apt-get update
 #         sudo apt-get upgrade -y
@@ -26,6 +26,14 @@ Vagrant.configure("2") do |config|
     config.vm.define "kub1" do |kub1|
       kub1.vm.hostname = "kubernetes-1"
       kub1.vm.network :private_network, ip: "10.0.0.10"
+
+      kub1.vm.provision "shell", inline: <<-SHELL
+        sudo kubeadm init --apiserver-advertise-address=10.0.0.10 --pod-network-cidr=10.0.0.0/24
+        mkdir -p $HOME/.kube
+        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config
+        kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      SHELL
 
 #     config.vm.network "forwarded_port", guest: 4567, host: 4567
     end
